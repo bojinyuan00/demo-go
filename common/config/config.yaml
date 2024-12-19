@@ -1,0 +1,49 @@
+# 启动端口号
+server:
+  port: 8001
+
+# database数据源配置
+databases:
+  driver: "mysql"
+  dsn: "root:admin123456@tcp(localhost:3306)/ceshi?charset=utf8mb4&parseTime=True&loc=Local"
+  host: "127.0.0.1"
+  port: 3306
+  db_name: "ceshi"
+  user: "root"
+  password: "admin123456"
+  max_idle_conns: 10
+  max_open_conns: 100
+  conn_max_lifetime: 3600
+#  - driver: "postgres"
+#    dsn: "host=193.111.30.201 port=15432 user=root password=admin123456 dbname=testdb sslmode=disable"
+#    max_idle_conns: 10
+#    max_open_conns: 100
+#    conn_max_lifetime: 3600
+#  - driver: "kingbase"
+#    dsn: "user=root password=admin123456 dbname=test host=localhost port=54321 sslmode=disable"
+#    max_idle_conns: 5
+#    max_open_conns: 50
+#    conn_max_lifetime: 3600
+#  - driver: "dm"
+#    dsn: "dm://SYSDBA:admin123456@193.111.30.201:5236?schema=bujinyuan"
+#    max_idle_conns: 5
+#    max_open_conns: 50
+#    conn_max_lifetime: 3600
+
+# redis配置
+redis:
+  host: "localhost"
+  port: 6380
+  password: "admin123456"
+  db: 0
+
+# 日志配置
+log:
+  path: "./logs" #log文件路径
+  level: "debug"          # 日志级别：debug, info, warn, error
+  format: "json"          # 日志格式：json, text
+  access_file: "access.log"
+  error_file: "error.log"
+  slow_query_file: "slow_query.log"
+  slow_query_threshold_ms: 500 # 慢查询阈值（毫秒）
+

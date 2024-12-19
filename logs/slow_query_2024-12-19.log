@@ -1,0 +1,1 @@
+{"file":"/Users/bojinyuan/Documents/workspace/go/demo-go/common/middleware/logger.go","function":"demo-go/common/router.InitRouter.LoggerMiddleware.func2","latency_ms":601,"level":"warning","line":29,"logType":"Slow-query-log","method":"GET","msg":"Slow-query-detected","path":"/user/122222111","time":"2024-12-19 18:38:29"}
