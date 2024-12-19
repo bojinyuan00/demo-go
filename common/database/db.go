@@ -4,8 +4,8 @@ import (
 	"context"
 	"demo-go/app/model"
 	"demo-go/common/config"
+	drivers2 "demo-go/common/database/drivers"
 	"demo-go/common/global"
-	"demo-go/database/drivers"
 	"errors"
 	"fmt"
 	"github.com/redis/go-redis/v9"
@@ -87,13 +87,13 @@ func InitGormDB(driver, host, userName, password, database string, port int, max
 	var dialector gorm.Dialector
 	switch driver {
 	case "mysql": // mysql 数据库
-		dialector = drivers.NewMysqlDialector(host, userName, password, database, port)
+		dialector = drivers2.NewMysqlDialector(host, userName, password, database, port)
 	case "postgres": // postgres 数据库
-		dialector = drivers.NewPostgresDialector(host, userName, password, database, port)
+		dialector = drivers2.NewPostgresDialector(host, userName, password, database, port)
 	case "kingbase": // kingbase 数据库-人大金仓
-		dialector = drivers.NewKingbaseDialector(host, userName, password, database, port)
+		dialector = drivers2.NewKingbaseDialector(host, userName, password, database, port)
 	case "dm": //达梦数据库
-		dialector = drivers.NewDmDialector(host, userName, password, database, port)
+		dialector = drivers2.NewDmDialector(host, userName, password, database, port)
 	default:
 		return nil, errors.New("gorm Database connection not found")
 	}
