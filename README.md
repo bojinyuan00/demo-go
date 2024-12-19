@@ -4,8 +4,6 @@
 ## 目录结构
 ```
 demo-go
-├── cmd
-│   └── main.go // 程序入口
 ├── app
 │   └── api //对外api层
 │   └── controller //控制器层 
