@@ -1,7 +1,7 @@
 package initall
 
 import (
-	"demo-go/common/database"
+	"demo-go/database"
 )
 
 func dbInit() error {
