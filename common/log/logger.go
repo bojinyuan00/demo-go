@@ -115,26 +115,10 @@ func AccessLogger(method, path string, statusCode int, latency time.Duration, cl
 
 // ErrorLogger 记录错误日志
 func ErrorLogger(err error, message string) {
-	//先记录一份到access日志文件内
-	// 检查日志文件是否存在，不存在则创建（服务启动后，删除日志文件需要重建）
-	accessFile := fmt.Sprintf("%s/access_%s.log", global.Config.Log.Path, time.Now().Format("2006-01-02"))
-	checkLogFile(accessFile, "access") // 检查日志文件是否存在
-
-	file, line, function := utils.GetCallerInfo()
-	accessLogger.WithFields(logrus.Fields{
-		"logType":  "Error-log",
-		"error":    err,
-		"message":  message,
-		"file":     file,
-		"line":     line,
-		"function": function,
-	}).Error("Error-log")
-
-	//再单独记录一份到error日志文件内
 	// 检查日志文件是否存在，不存在则创建（服务启动后，删除日志文件需要重建）
 	errorFile := fmt.Sprintf("%s/error_%s.log", global.Config.Log.Path, time.Now().Format("2006-01-02"))
 	checkLogFile(errorFile, "error") // 检查日志文件是否存在
-
+	file, line, function := utils.GetCallerInfo()
 	errorLogger.WithFields(logrus.Fields{
 		"logType":  "Error-log",
 		"error":    err,
@@ -166,21 +150,53 @@ func SlowQueryLogger(method, path string, latency time.Duration) {
 	}
 }
 
-// TimeTracker 记录函数执行时间(程序调用栈)
-func TimeTracker(start time.Time) {
+func TimeTracker(start time.Time, params interface{}, result interface{}, err error) {
 	// 检查日志文件是否存在，不存在则创建（服务启动后，删除日志文件需要重建）
 	accessFile := fmt.Sprintf("%s/access_%s.log", global.Config.Log.Path, time.Now().Format("2006-01-02"))
-	checkLogFile(accessFile, "access")
+	checkLogFile(accessFile, "access") // 检查日志文件是否存在
+	elapsed := time.Since(start)       //时间差
 
-	elapsed := time.Since(start)
+	//有error时，记录相关的调用栈信息（不需要记录file、line、function信息，因为err内已经包含）且单独记录error到error日志文件内
+	if err != nil {
+		accessLogger.WithFields(logrus.Fields{
+			"logType":    "Tracker-log",
+			"latency_ms": elapsed.Milliseconds(),
+			"params":     params,
+			"result":     result,
+			"error":      err,
+		}).Info("Tracker-log")
+		ErrorLogger(err, "TimeTracker-ErrorLog")
+		return
+	}
+
+	//无error时，只记录相关的调用栈信息--增加日志记录的灵活性（file、line、function）具体信息
 	file, line, function := utils.GetCallerInfo()
 	accessLogger.WithFields(logrus.Fields{
 		"logType":    "Tracker-log",
 		"latency_ms": elapsed.Milliseconds(),
-		"function":   function,
+		"params":     params,
+		"result":     result,
+		"error":      err,
 		"file":       file,
 		"line":       line,
+		"function":   function,
 	}).Info("Tracker-log")
+
+}
+
+// CustomLogger 自定义日志记录
+func CustomLogger(start time.Time, fields logrus.Fields) {
+	// 检查日志文件是否存在，不存在则创建（服务启动后，删除日志文件需要重建）
+	accessFile := fmt.Sprintf("%s/access_%s.log", global.Config.Log.Path, time.Now().Format("2006-01-02"))
+	checkLogFile(accessFile, "access")
+	elapsed := time.Since(start)
+	file, line, function := utils.GetCallerInfo()
+	fields["logType"] = "Custom-logger"
+	fields["latency_ms"] = elapsed.Milliseconds()
+	fields["file"] = file
+	fields["line"] = line
+	fields["function"] = function
+	accessLogger.WithFields(fields).Info("Custom-logger")
 }
 
 // getCallerInfo 获取调用日志函数的文件名、行号和方法名
