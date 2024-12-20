@@ -3,8 +3,8 @@ package database
 import (
 	"context"
 	"demo-go/app/model"
-	"demo-go/common/config"
 	"demo-go/common/global"
+	"demo-go/config"
 	"demo-go/database/drivers"
 	"errors"
 	"fmt"

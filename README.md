@@ -1,6 +1,7 @@
 # demo-go
 ## 介绍
     'demo-go'是一个自定义go-脚手架
+    适合go语言初学者学习使用，适合java、python、php等开发者，熟悉面向对象编程、容器依赖注入思想，学习go。
     主要用于快速搭建go项目的脚手架，目录层级清晰分明，包含了常用的功能模块，如：
     - 日志记录 logrus （完整请求栈记录，错误日志记录，慢查询日志记录）
     - 统一错误处理（错误日志记录，统一错误处理）
@@ -10,7 +11,10 @@
     - 自定义配置 (yaml格式) viper控制文件读取
     - 容器化管理，依赖注入 (wire)-自动生成依赖注入代码，只用实例化最上层类即可
     - 中间件 middleware 自定义配置   
-    - 自定义服务初始化   initall一切 
+    - 自定义服务初始化   initall一切 初始化各类服务
+    - 单元测试 test
+    - 持续集成 cicd (github action)--待完善
+    - 其他功能待补充...
 ## 目录结构
 ```
 demo-go
@@ -22,10 +26,10 @@ demo-go
 │   └── model //模型层
 │   └── provider //容器化依赖管理层
 │      └── provider.go // 声明依赖关系，自动生成依赖注入代码，只用实例化最上层类即可
+├── config // 配置
+│     └── config.go // 配置文件
+│     └── config.yaml // 配置文件定义
 ├── common //公共代码层
-│   └── config // 配置
-│      └── config.go // 配置文件
-│      └── config.yaml // 配置文件定义
 │   └── global // 全局设置
 │      └── global.go // 全局变量
 │   └── router // 路由层
@@ -37,7 +41,7 @@ demo-go
 │   └── middleware // 中间件层
 │      └── logger.go // 日志中间件
 │      └── cors.go // 跨域中间件
-│   └── initall // 初始化函数
+│   └── initall // 初始化层
 │      └── initall.go // 初始化各类服务
 ├── logs // 日志文件记录层
 │      └── access_日期.log // 完整请求栈日志
@@ -51,6 +55,9 @@ demo-go
 │      └── kingbase.go  // 人大金仓数据库驱动
 │      └── postgres.go  // postgres数据库驱动
 │      └── ... // 其他数据库驱动
+├── test // 测试代码层
+│   └── test.go // 测试代码
+├── cicd // 持续集成工具层
 ├── main.go // 程序入口
 ├── go.mod
 ├── go.sum

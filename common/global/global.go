@@ -1,7 +1,7 @@
 package global
 
 import (
-	"demo-go/common/config"
+	"demo-go/config"
 	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
 )

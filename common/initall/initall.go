@@ -3,7 +3,7 @@ package initall
 // All initall all
 func All() {
 	//load config 文件
-	err := loadConfig("./common/config")
+	err := loadConfig("./config")
 	if err != nil {
 		return
 	}
