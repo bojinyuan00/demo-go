@@ -2,7 +2,6 @@ package controller
 
 import (
 	"demo-go/app/service"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -22,10 +21,9 @@ func (u *UserController) GetUserInfo(c *gin.Context) {
 	//defer log.TimeTracker(time.Now(), requestParam, responseParam) // 记录执行栈
 
 	id, _ := strconv.Atoi(c.Param("id"))
-	user, err := u.UserService.GetUserInfoById(id)
+	user, err, _, message := u.UserService.GetUserInfoById(id)
 	if err != nil {
-		fmt.Println(err.Error())
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get user"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "请求失败：" + message})
 		return
 	}
 	c.JSON(http.StatusOK, user)
@@ -36,10 +34,9 @@ func (u *UserController) GetUserListInfo(c *gin.Context) {
 	//defer log.TimeTracker(time.Now(), requestParam, responseParam) // 记录执行栈
 
 	id, _ := strconv.Atoi(c.Param("id"))
-	user, err := u.UserService.GetUserInfoById(id)
+	user, err, _, message := u.UserService.GetUserInfoById(id)
 	if err != nil {
-		fmt.Println(err.Error())
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get user"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "请求失败：" + message})
 		return
 	}
 	c.JSON(http.StatusOK, user)

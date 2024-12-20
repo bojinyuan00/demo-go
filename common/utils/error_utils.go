@@ -23,5 +23,5 @@ func CaptureError(err error, msg string) error {
 	}
 
 	//返回带错误信息的错误
-	return fmt.Errorf("error_detail: %w, custom_message: %s, error_file: %s, error_line:%d, error_function: %s", err, msg, file, line, function)
+	return fmt.Errorf("detail: %v, custom_message: %s, error_file: %s, error_line:%d, error_function: %s", err, msg, file, line, function)
 }

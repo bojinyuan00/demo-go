@@ -99,7 +99,7 @@ func AccessLogger(method, path string, statusCode int, latency time.Duration, cl
 	accessFile := fmt.Sprintf("%s/access_%s.log", global.Config.Log.Path, time.Now().Format("2006-01-02"))
 	checkLogFile(accessFile, "access") // 检查日志文件是否存在
 
-	file, line, function := utils.GetCallerInfo()
+	//file, line, function := utils.GetCallerInfo(1)
 	accessLogger.WithFields(logrus.Fields{
 		"logType":     "Access-log",
 		"method":      method,
@@ -107,9 +107,9 @@ func AccessLogger(method, path string, statusCode int, latency time.Duration, cl
 		"status_code": statusCode,
 		"latency_ms":  latency.Milliseconds(),
 		"client_ip":   clientIP,
-		"file":        file,
-		"line":        line,
-		"function":    function,
+		//"file":        file,
+		//"line":        line,
+		//"function":    function,
 	}).Info("Access-log")
 }
 
@@ -118,7 +118,7 @@ func ErrorLogger(err error, message string) {
 	// 检查日志文件是否存在，不存在则创建（服务启动后，删除日志文件需要重建）
 	errorFile := fmt.Sprintf("%s/error_%s.log", global.Config.Log.Path, time.Now().Format("2006-01-02"))
 	checkLogFile(errorFile, "error") // 检查日志文件是否存在
-	file, line, function := utils.GetCallerInfo()
+	file, line, function := utils.GetCallerInfo(2)
 	errorLogger.WithFields(logrus.Fields{
 		"logType":  "Error-log",
 		"error":    err,
@@ -137,7 +137,7 @@ func SlowQueryLogger(method, path string, latency time.Duration) {
 		slowQueryFile := fmt.Sprintf("%s/slow_query_%s.log", global.Config.Log.Path, time.Now().Format("2006-01-02"))
 		checkLogFile(slowQueryFile, "slow_query") // 检查日志文件是否存在
 
-		file, line, function := utils.GetCallerInfo()
+		file, line, function := utils.GetCallerInfo(1)
 		slowQueryLogger.WithFields(logrus.Fields{
 			"logType":    "Slow-query-log",
 			"method":     method,
@@ -170,7 +170,7 @@ func TimeTracker(start time.Time, params interface{}, result interface{}, err er
 	}
 
 	//无error时，只记录相关的调用栈信息--增加日志记录的灵活性（file、line、function）具体信息
-	file, line, function := utils.GetCallerInfo()
+	file, line, function := utils.GetCallerInfo(3)
 	accessLogger.WithFields(logrus.Fields{
 		"logType":    "Tracker-log",
 		"latency_ms": elapsed.Milliseconds(),
@@ -190,7 +190,7 @@ func CustomLogger(start time.Time, fields logrus.Fields) {
 	accessFile := fmt.Sprintf("%s/access_%s.log", global.Config.Log.Path, time.Now().Format("2006-01-02"))
 	checkLogFile(accessFile, "access")
 	elapsed := time.Since(start)
-	file, line, function := utils.GetCallerInfo()
+	file, line, function := utils.GetCallerInfo(2)
 	fields["logType"] = "Custom-logger"
 	fields["latency_ms"] = elapsed.Milliseconds()
 	fields["file"] = file

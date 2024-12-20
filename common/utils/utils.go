@@ -38,8 +38,8 @@ func ToInt64(val interface{}) (int64, error) {
 }
 
 // GetCallerInfo 获取调用日志函数的文件名、行号和方法名
-func GetCallerInfo() (file string, line int, function string) {
-	pc, file, line, ok := runtime.Caller(2)
+func GetCallerInfo(skip int) (file string, line int, function string) {
+	pc, file, line, ok := runtime.Caller(skip)
 	if !ok {
 		return "unknown", 0, "unknown"
 	}
