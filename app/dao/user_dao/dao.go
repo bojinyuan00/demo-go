@@ -12,7 +12,7 @@ import (
 type Dao struct {
 }
 
-// NewDao 创建 UserDao 实例
+// NewDao  创建 UserDao 实例
 func NewDao() *Dao {
 	return &Dao{}
 }
