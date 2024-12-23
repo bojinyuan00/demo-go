@@ -7,17 +7,19 @@
 package provider
 
 import (
-	"demo-go/app/controller"
-	"demo-go/app/dao"
-	"demo-go/app/service"
+	"demo-go/app/controller/user_controller"
+	"demo-go/app/dao/product_dao"
+	"demo-go/app/dao/user_dao"
+	"demo-go/app/service/user_service"
 )
 
 // Injectors from provider.go:
 
 // InitializeUserController 自动生成构造函数
-func InitializeUserController() (*controller.UserController, error) {
-	userDao := dao.NewUserDao()
-	userService := service.NewUserService(userDao)
-	userController := controller.NewUserController(userService)
-	return userController, nil
+func InitializeUserController() (*user_controller.Controller, error) {
+	dao := user_dao.NewDao()
+	product_daoDao := product_dao.NewDao()
+	service := user_service.NewService(dao, product_daoDao)
+	controller := user_controller.NewController(service)
+	return controller, nil
 }

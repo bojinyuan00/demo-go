@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
-// NewPostgresDialector psostgres数据库驱动
+// NewPostgresDialector postgres数据库驱动
 func NewPostgresDialector(host, userName, password, database string, port int) gorm.Dialector {
 	dsn := BuildPostgresDsn(host, userName, password, database, port)
 	fmt.Println("postgres数据库连接信息dsn：", dsn)

@@ -1,4 +1,4 @@
-package dao
+package product_dao
 
 import (
 	"demo-go/app/model"
@@ -8,13 +8,13 @@ import (
 	"time"
 )
 
-// UserDao 数据访问对象
-type UserDao struct {
+// Dao UserDao 数据访问对象
+type Dao struct {
 }
 
-// NewUserDao 创建 UserDao 实例
-func NewUserDao() *UserDao {
-	return &UserDao{}
+// NewDao 创建 ProductDao 实例
+func NewDao() *Dao {
+	return &Dao{}
 }
 
 // GetUserById 根据ID获取用户信息
@@ -29,7 +29,7 @@ func NewUserDao() *UserDao {
  * @author 卜锦元
  * @date 2024/12/21
  */
-func (u *UserDao) GetUserById(id int) (user *model.User, err error, customErr error, message string) {
+func (u *Dao) GetUserById(id int) (user *model.User, err error, customErr error, message string) {
 	start := time.Now() //访问时间
 	logParams := make(map[string]interface{})
 	logParams["id"] = id

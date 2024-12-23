@@ -22,6 +22,7 @@ var mu sync.Mutex
 // InitDB 初始化数据库连接
 func InitDB() error {
 	cfg := global.Config
+
 	// 初始化数据库连接 gorm
 	fmt.Println("gorm-database-config-initall", cfg.Databases)
 	_, err := InitGormDB(cfg.Databases.Driver, cfg.Databases.Host, cfg.Databases.User, cfg.Databases.Password, cfg.Databases.DBName, cfg.Databases.Port, cfg.Databases.MaxIdleConns, cfg.Databases.MaxOpenConns, cfg.Databases.ConnMaxLife)
@@ -77,13 +78,16 @@ func InitRedisDB(config config.RedisConfig) (*redis.Client, error) {
 
 // InitGormDB 封装具体的数据库连接逻辑
 func InitGormDB(driver, host, userName, password, database string, port int, maxIdle, maxOpen, maxLifetime int) (*gorm.DB, error) {
+	//加锁实现线程安全
 	mu.Lock()
 	defer mu.Unlock()
 
+	// 全局数据库连接存在，则直接返回
 	if global.GormDB != nil {
 		return global.GormDB, nil
 	}
 
+	// 创建数据库连接
 	var dialector gorm.Dialector
 	switch driver {
 	case "mysql": // mysql 数据库
@@ -98,12 +102,13 @@ func InitGormDB(driver, host, userName, password, database string, port int, max
 		return nil, errors.New("gorm Database connection not found")
 	}
 
+	// 连接数据库
 	db, err := gorm.Open(dialector, &gorm.Config{})
 	if err != nil {
 		return nil, err
 	}
 
-	//// 自动迁移表结构
+	// 自动迁移表结构
 	go func() {
 		err := autoMigrate(db)
 		if err != nil {
@@ -132,6 +137,7 @@ func InitGormDB(driver, host, userName, password, database string, port int, max
 	return db, nil
 }
 
+// autoMigrate 自动迁移表结构
 func autoMigrate(db *gorm.DB) error {
 	// 自动迁移表结构
 	err := db.AutoMigrate(&model.User{})
