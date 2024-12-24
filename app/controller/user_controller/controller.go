@@ -11,7 +11,7 @@ type Controller struct {
 	UserService *user_service.Service
 }
 
-// NewController 创建 UserController 实例
+// NewController 创建 UserController 实例 test
 func NewController(userService *user_service.Service) *Controller {
 	return &Controller{UserService: userService}
 }
